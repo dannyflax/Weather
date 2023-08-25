@@ -9,7 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class GeoData;
+
 @interface GeoDataFetcher : NSObject
+
++ (void)fetchGeoDataWithKey:(NSString *)key completionBlock:(void(^)(GeoData *geoData))completionBlock;
 
 @end
 

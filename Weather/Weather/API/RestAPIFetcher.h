@@ -9,7 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*
+ * Keep this as a static method for now, since this class doesn't require any state.
+ * Later we might want to introduce state to handle things like request throttling.
+ */
 @interface RestAPIFetcher : NSObject
+
++ (void)fetchFromEndpoint:(NSString *)endpoint withParams:(NSDictionary<NSString *, NSString *> *)params completionBlock:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionBlock;
 
 @end
 

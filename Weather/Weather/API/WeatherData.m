@@ -9,4 +9,15 @@
 
 @implementation WeatherData
 
+
+- (instancetype)initWithMainTitle:(NSString *)mainTitle weatherDescription:(NSString *)weatherDescription iconName:(NSString *)iconName
+{
+  if (self = [super init]) {
+    _mainTitle = mainTitle;
+    _weatherDescription = weatherDescription;
+    _iconName = iconName;
+  }
+  return self;
+}
+
 @end

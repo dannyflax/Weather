@@ -7,6 +7,7 @@
 
 #import "Utils.h"
 
-@implementation Utils
-
-@end
+id CastToClassOrNil(id obj, Class className)
+{
+  return [(NSObject *)obj isKindOfClass:className] ? obj : nil;
+}

@@ -11,6 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GeoData : NSObject
 
+- (instancetype)initWithName:(NSString *)name latitude:(double)latitude longitude:(double)longitude country:(NSString *)country state:(NSString *)state;
+
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) double latitude;
+@property (nonatomic, readonly) double longitude;
+@property (nonatomic, readonly) NSString *country;
+@property (nonatomic, readonly) NSString *state;
+
 @end
 
 NS_ASSUME_NONNULL_END

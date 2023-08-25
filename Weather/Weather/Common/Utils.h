@@ -9,8 +9,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Utils : NSObject
-
-@end
+extern id CastToClassOrNil(id obj, Class className);
 
 NS_ASSUME_NONNULL_END
