@@ -255,11 +255,11 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   [_description sizeToFit];
   [_locationDetails sizeToFit];
   
-  CGRect centeredLocation = GetFrameCentered(_weatherDisplayView.frame, _locationTitle.frame.size.width, _locationTitle.frame.size.height);
+  // Hack - For some reason sizeToFit is giving too small of a width. Multiply it x2.
+  CGRect centeredLocation = GetFrameCentered(_weatherDisplayView.frame, _locationTitle.frame.size.width * 2, _locationTitle.frame.size.height);
   
   CGRect centeredIcon = GetFrameCentered(_weatherDisplayView.frame, 100, 100);
   
-  // Hack - For some reason sizeToFit is giving too small of a width. Multiply it x2.
   CGRect centeredDescription = GetFrameCentered(_weatherDisplayView.frame, _description.frame.size.width * 2, _description.frame.size.height);
   
   CGRect centeredLocationDetails = GetFrameCentered(_weatherDisplayView.frame, _locationDetails.frame.size.width * 2, _locationDetails.frame.size.height);
