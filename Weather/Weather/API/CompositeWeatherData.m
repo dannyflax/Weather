@@ -9,7 +9,7 @@
 
 @implementation CompositeWeatherData
 
-- (instancetype)initWithLocationName:(NSString *)locationName country:(NSString *)country state:(NSString *)state weatherStatusTitle:(NSString *)weatherStatusTitle weatherDescription:(NSString *)weatherDescription 
+- (instancetype)initWithLocationName:(NSString *)locationName country:(NSString *)country state:(NSString *)state weatherStatusTitle:(NSString *)weatherStatusTitle weatherDescription:(NSString *)weatherDescription icon:(UIImage *)icon
 {
   if (self = [super init]) {
     _locationName = locationName;
@@ -17,6 +17,7 @@
     _state = state;
     _weatherStatusTitle = weatherStatusTitle;
     _weatherDescription = weatherDescription;
+    _icon = icon;
   }
   return self;
 }

@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)fetchFromEndpoint:(NSString *)endpoint withParams:(NSDictionary<NSString *, NSString *> *)params completionBlock:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionBlock;
 
++ (void)fetchFromUrlDirectly:(NSString *)endpoint completionBlock:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

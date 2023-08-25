@@ -25,6 +25,7 @@
 		EF7A90B72A986837009AEF19 /* GeoDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90B62A986837009AEF19 /* GeoDataFetcher.m */; };
 		EF7A90BA2A991664009AEF19 /* CompositeWeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90B92A991664009AEF19 /* CompositeWeatherData.m */; };
 		EF7A90BD2A99176E009AEF19 /* CompositeWeatherDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90BC2A99176E009AEF19 /* CompositeWeatherDataFetcher.m */; };
+		EF7A90C02A991C09009AEF19 /* WeatherIconFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90BF2A991C09009AEF19 /* WeatherIconFetcher.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,8 @@
 		EF7A90B92A991664009AEF19 /* CompositeWeatherData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositeWeatherData.m; sourceTree = "<group>"; };
 		EF7A90BB2A99176E009AEF19 /* CompositeWeatherDataFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompositeWeatherDataFetcher.h; sourceTree = "<group>"; };
 		EF7A90BC2A99176E009AEF19 /* CompositeWeatherDataFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositeWeatherDataFetcher.m; sourceTree = "<group>"; };
+		EF7A90BE2A991C09009AEF19 /* WeatherIconFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherIconFetcher.h; sourceTree = "<group>"; };
+		EF7A90BF2A991C09009AEF19 /* WeatherIconFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherIconFetcher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +182,8 @@
 				EF7A90B92A991664009AEF19 /* CompositeWeatherData.m */,
 				EF7A90BB2A99176E009AEF19 /* CompositeWeatherDataFetcher.h */,
 				EF7A90BC2A99176E009AEF19 /* CompositeWeatherDataFetcher.m */,
+				EF7A90BE2A991C09009AEF19 /* WeatherIconFetcher.h */,
+				EF7A90BF2A991C09009AEF19 /* WeatherIconFetcher.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 				EF7A90BA2A991664009AEF19 /* CompositeWeatherData.m in Sources */,
 				EF7A90712A9842CD009AEF19 /* AppDelegate.m in Sources */,
 				EF7A90822A9842CF009AEF19 /* main.m in Sources */,
+				EF7A90C02A991C09009AEF19 /* WeatherIconFetcher.m in Sources */,
 				EF7A90742A9842CD009AEF19 /* SceneDelegate.m in Sources */,
 				EF7A90AA2A985ABD009AEF19 /* GeoData.m in Sources */,
 			);

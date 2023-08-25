@@ -6,6 +6,7 @@
 //
 
 #import "RestAPIFetcher.h"
+#import "Utils.h"
 
 NSString *const API_KEY = @"c2dd6aae1a49da88d25c8ad38688666b";
 NSString *const WEATHER_URL = @"https://api.openweathermap.org/";
@@ -19,7 +20,12 @@ NSString *const WEATHER_URL = @"https://api.openweathermap.org/";
     paramsString = [paramsString stringByAppendingFormat:@"&%@=%@", key, params[key]];
   }
   paramsString = [paramsString stringByAppendingFormat:@"&appid=%@", API_KEY];
-  NSString *urlString = [[WEATHER_URL stringByAppendingFormat:@"%@?", endpoint] stringByAppendingString:paramsString];
+  NSString *urlString = [[WEATHER_URL stringByAppendingFormat:@"%@?", endpoint] stringByAppendingString:UrlEncodeQueryString(paramsString)];
+  [self fetchFromUrlDirectly:urlString completionBlock:completionBlock];
+}
+
++ (void)fetchFromUrlDirectly:(NSString *)urlString completionBlock:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionBlock
+{
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
   [request setURL:[NSURL URLWithString:urlString]];
   [request setHTTPMethod:@"GET"];

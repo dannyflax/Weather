@@ -11,3 +11,8 @@ id CastToClassOrNil(id obj, Class className)
 {
   return [(NSObject *)obj isKindOfClass:className] ? obj : nil;
 }
+
+extern NSString *UrlEncodeQueryString(NSString *string)
+{
+  return [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+}

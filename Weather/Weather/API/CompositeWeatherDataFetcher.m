@@ -11,6 +11,7 @@
 #import "GeoData.h"
 #import "WeatherDataFetcher.h"
 #import "WeatherData.h"
+#import "WeatherIconFetcher.h"
 
 @implementation CompositeWeatherDataFetcher
 
@@ -27,7 +28,12 @@
       if (!weatherData) {
         completionBlock(nil);
       }
-      completionBlock([[CompositeWeatherData alloc] initWithLocationName:geoData.name country:geoData.country state:geoData.state weatherStatusTitle:weatherData.mainTitle weatherDescription:weatherData.description]);
+      [WeatherIconFetcher fetchIconWithName:weatherData.iconName completionBlock:^(UIImage * _Nonnull icon) {
+        if (!icon) {
+          completionBlock(nil);
+        }
+        completionBlock([[CompositeWeatherData alloc] initWithLocationName:geoData.name country:geoData.country state:geoData.state weatherStatusTitle:weatherData.mainTitle weatherDescription:weatherData.description icon:icon]);
+      }];
     }];
   }];
 }
