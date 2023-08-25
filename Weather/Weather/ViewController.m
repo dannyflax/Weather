@@ -13,6 +13,8 @@
 #import "CompositeWeatherData.h"
 #import "WeatherUIState.h"
 
+NSString *const LAST_SEARCH_KEY = @"last_search_key";
+
 @interface ViewController ()
 
 @end
@@ -37,10 +39,29 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   return CGRectMake((frame.size.width / 2) - (width / 2), (frame.size.height / 2) - (height / 2), width, height);
 }
 
+#pragma mark - Last Search
+
+- (void)_storeLastSearch:(NSString *)lastSearch
+{
+  if (lastSearch != nil) {
+    [[NSUserDefaults standardUserDefaults] setObject:lastSearch forKey:LAST_SEARCH_KEY];
+  }
+}
+
+- (NSString *)_retrieveLastSearch
+{
+  return [[NSUserDefaults standardUserDefaults] objectForKey:LAST_SEARCH_KEY];
+}
+
+#pragma mark - View
+
 - (void)viewDidLoad {
   [super viewDidLoad];
-  // Probably would be more efficient to do this in the constructor, but this works forn ow.
   [self _setUIState:[WeatherUIState newWithEmpty]];
+  // Probably would be more efficient to do this in the constructor, but this works for now.
+  NSString *key = [self _retrieveLastSearch];
+  _searchTextField.text = key;
+  [self _didTapSearchButton:nil];
 }
 
 - (void)loadView
@@ -104,9 +125,10 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
 - (void)_didTapSearchButton:(UIButton *)button
 {
   NSString *key = _searchTextField.text;
-  if (!key) {
+  if (!key || key.length <= 0) {
     return;
   }
+  [self _storeLastSearch:key];
   [self _setUIState:[WeatherUIState newWithLoading]];
   [CompositeWeatherDataFetcher fetchWeatherWithKey:key completionBlock:^(CompositeWeatherData * _Nonnull weatherData) {
     if (!weatherData) {
