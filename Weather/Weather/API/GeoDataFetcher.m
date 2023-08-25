@@ -74,7 +74,8 @@
   NSString *state = CastToClassOrNil(geoDict[@"state"], NSString.class);
   
   // Could potentially make this more robust in the future to handle partial responses.
-  if (!name || !latitude || !longitude || !country || !state) {
+  // Note that state can be empty in non-US locations.
+  if (!name || !latitude || !longitude || !country) {
     completionBlock(nil);
     return;
   }

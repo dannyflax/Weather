@@ -249,7 +249,8 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   [_locationTitle setText:weatherData.locationName];
   [_icon setImage:weatherData.icon];
   [_description setText:weatherData.weatherDescription];
-  [_locationDetails setText:[NSString stringWithFormat:@"%@, %@", weatherData.state, weatherData.country]];
+  NSString *const locationDetails = weatherData.state ? [NSString stringWithFormat:@"%@, %@", weatherData.state, weatherData.country] : [NSString stringWithFormat:@"%@, %@", weatherData.locationName, weatherData.country];
+  [_locationDetails setText:locationDetails];
   
   [_locationTitle sizeToFit];
   [_description sizeToFit];
