@@ -22,6 +22,7 @@ NSString *const API_NAME = @"https://openweathermap.org/";
                             completionBlock:^(NSData * _Nonnull data, NSURLResponse * _Nonnull response, NSError * _Nonnull error) {
     if (error || !data) {
       completionBlock(nil);
+      return;
     }
     completionBlock([UIImage imageWithData:data]);
   }];

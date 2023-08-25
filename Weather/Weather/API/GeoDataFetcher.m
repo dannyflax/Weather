@@ -24,6 +24,7 @@
                          withParams:params completionBlock:^(NSData * _Nonnull data, NSURLResponse * _Nonnull response, NSError * _Nonnull error) {
     if (error) {
       completionBlock(nil);
+      return;
     }
     [self _parseNSDataToGeoData:data completionBlock:completionBlock];
   }];
@@ -33,17 +34,20 @@
 {
   if (!geoData) {
     completionBlock(nil);
+    return;
   }
   NSError *error = nil;
   id jsonObject = [NSJSONSerialization JSONObjectWithData:geoData options:kNilOptions error:&error];
   NSArray *jsonArray = CastToClassOrNil(jsonObject, NSArray.class);
   if (error != nil || !jsonArray || jsonArray.count <= 0) {
     completionBlock(nil);
+    return;
   }
   // Simplify by taking the first geo object.
   NSDictionary *geoDict = CastToClassOrNil(jsonArray[0], NSDictionary.class);
   if (!geoDict) {
     completionBlock(nil);
+    return;
   }
   
   NSString *name = CastToClassOrNil(geoDict[@"name"], NSString.class);
@@ -55,6 +59,7 @@
   // Could potentially make this more robust in the future to handle partial responses.
   if (!name || !latitude || !longitude || !country || !state) {
     completionBlock(nil);
+    return;
   }
   
   completionBlock([[GeoData alloc] initWithName:name latitude:latitude.doubleValue longitude:longitude.doubleValue country:country state:state]);

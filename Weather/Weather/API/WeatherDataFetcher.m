@@ -22,6 +22,7 @@
                          withParams:params completionBlock:^(NSData * _Nonnull data, NSURLResponse * _Nonnull response, NSError * _Nonnull error) {
     if (error) {
       completionBlock(nil);
+      return;
     }
     [self _parseNSDataToWeather:data completionBlock:completionBlock];
   }];
@@ -31,12 +32,14 @@
 {
   if (!weatherData) {
     completionBlock(nil);
+    return;
   }
   NSError *error = nil;
   id jsonObject = [NSJSONSerialization JSONObjectWithData:weatherData options:kNilOptions error:&error];
   NSDictionary<NSString *, NSString *> *jsonDictionary = CastToClassOrNil(jsonObject, NSDictionary.class);
   if (error != nil || !jsonDictionary) {
     completionBlock(nil);
+    return;
   }
   NSArray *weather = CastToClassOrNil(jsonDictionary[@"weather"], NSArray.class);
   if (!weather || weather.count <= 0) {
@@ -46,6 +49,7 @@
   NSDictionary<NSString *, NSString *> *weatherFirst = CastToClassOrNil(weather[0], NSDictionary.class);
   if (!weatherFirst) {
     completionBlock(nil);
+    return;
   }
   NSString *mainTitle = CastToClassOrNil(weatherFirst[@"main"], NSString.class);
   NSString *weatherDescription = CastToClassOrNil(weatherFirst[@"description"], NSString.class);
@@ -54,6 +58,7 @@
   // Could potentially make this more robust in the future to handle partial responses.
   if (!mainTitle || !weatherDescription || !iconName) {
     completionBlock(nil);
+    return;
   }
   
   completionBlock([[WeatherData alloc] initWithMainTitle:mainTitle weatherDescription:weatherDescription iconName:iconName]);
