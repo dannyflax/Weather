@@ -20,52 +20,62 @@ typedef NS_ENUM(NSInteger, WeatherUIStateValue) {
 {
   WeatherUIStateValue _internalState;
   CompositeWeatherData *_weatherData;
+  NSString *_searchText;
 }
 
-- (void)empty:(void(^)(void))emptyBlock hasWeather:(void(^)(CompositeWeatherData *))hasWeatherBlock loading:(void(^)(void))loadingBlock error:(void(^)(void))errorBlock
+- (void)empty:(void(^)(NSString *searchText))emptyBlock hasWeather:(void(^)(CompositeWeatherData *, NSString *searchText))hasWeatherBlock loading:(void(^)(NSString *searchText))loadingBlock error:(void(^)(NSString *searchText))errorBlock
 {
   switch (_internalState) {
     case WeatherUIStateValueEmpty:
-      emptyBlock();
+      emptyBlock(_searchText);
       break;
     case WeatherUIStateValueHasWeather:
-      hasWeatherBlock(_weatherData);
+      hasWeatherBlock(_weatherData, _searchText);
       break;
     case WeatherUIStateValueLoading:
-      loadingBlock();
+      loadingBlock(_searchText);
       break;
     case WeatherUIStateValueError:
-      errorBlock();
+      errorBlock(_searchText);
       break;
   }
 }
 
-+ (instancetype)newWithEmpty
+- (NSString *)searchText
+{
+  return _searchText;
+}
+
++ (instancetype)newWithEmpty:(NSString *)searchText
 {
   WeatherUIState *state = [WeatherUIState new];
   state->_internalState = WeatherUIStateValueEmpty;
+  state->_searchText = searchText;
   return state;
 }
 
-+ (instancetype)newWithHasWeather:(CompositeWeatherData *)weather
++ (instancetype)newWithHasWeather:(CompositeWeatherData *)weather searchText:(NSString *)searchText
 {
   WeatherUIState *state = [WeatherUIState new];
   state->_internalState = WeatherUIStateValueHasWeather;
   state->_weatherData = weather;
+  state->_searchText = searchText;
   return state;
 }
 
-+ (instancetype)newWithLoading
++ (instancetype)newWithLoading:(NSString *)searchText
 {
   WeatherUIState *state = [WeatherUIState new];
   state->_internalState = WeatherUIStateValueLoading;
+  state->_searchText = searchText;
   return state;
 }
 
-+ (instancetype)newWithError
++ (instancetype)newWithError:(NSString *)searchText
 {
   WeatherUIState *state = [WeatherUIState new];
   state->_internalState = WeatherUIStateValueError;
+  state->_searchText = searchText;
   return state;
 }
 

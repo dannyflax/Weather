@@ -13,15 +13,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WeatherUIState : NSObject
 
-- (void)empty:(void(^)(void))emptyBlock hasWeather:(void(^)(CompositeWeatherData *))hasWeatherBlock loading:(void(^)(void))loadingBlock error:(void(^)(void))errorBlock;
+- (void)empty:(void(^)(NSString *searchText))emptyBlock hasWeather:(void(^)(CompositeWeatherData *, NSString *searchText))hasWeatherBlock loading:(void(^)(NSString *searchText))loadingBlock error:(void(^)(NSString *searchText))errorBlock;
 
-+ (instancetype)newWithEmpty;
+- (NSString *)searchText;
 
-+ (instancetype)newWithHasWeather:(CompositeWeatherData *)weather;
++ (instancetype)newWithEmpty:(NSString *)searchText;
 
-+ (instancetype)newWithLoading;
++ (instancetype)newWithHasWeather:(CompositeWeatherData *)weather searchText:(NSString *)searchText;
 
-+ (instancetype)newWithError;
++ (instancetype)newWithLoading:(NSString *)searchText;
+
++ (instancetype)newWithError:(NSString *)searchText;
 
 @end
 

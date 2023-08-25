@@ -30,6 +30,23 @@
   }];
 }
 
++ (void)fetchGeoDataWithLat:(double)lat lon:(double)lon completionBlock:(void(^)(GeoData *geoData))completionBlock
+{
+  NSDictionary<NSString *, NSString *> *params = @{
+    @"lat" : [NSString stringWithFormat:@"%f", lat],
+    @"lon" : [NSString stringWithFormat:@"%f", lon],
+    @"limit" : @"1"
+  };
+  [RestAPIFetcher fetchFromEndpoint:@"geo/1.0/reverse"
+                         withParams:params completionBlock:^(NSData * _Nonnull data, NSURLResponse * _Nonnull response, NSError * _Nonnull error) {
+    if (error) {
+      completionBlock(nil);
+      return;
+    }
+    [self _parseNSDataToGeoData:data completionBlock:completionBlock];
+  }];
+}
+
 + (void)_parseNSDataToGeoData:(NSData *)geoData completionBlock:(void(^)(GeoData *geoData))completionBlock
 {
   if (!geoData) {

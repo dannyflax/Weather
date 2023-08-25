@@ -12,6 +12,7 @@
 #import "CompositeWeatherDataFetcher.h"
 #import "CompositeWeatherData.h"
 #import "WeatherUIState.h"
+#import "LocationManager.h"
 
 NSString *const LAST_SEARCH_KEY = @"last_search_key";
 
@@ -32,6 +33,8 @@ NSString *const LAST_SEARCH_KEY = @"last_search_key";
   UILabel *_description;
   UILabel *_locationDetails;
   UILabel *_errorLabel;
+  
+  LocationManager *_locationManager;
 }
 
 static CGRect GetFrameCentered(CGRect frame, int width, int height)
@@ -40,6 +43,9 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
 }
 
 #pragma mark - Last Search
+
+// Keep last search very simple.
+// Just user NSUserDefaults and overwrite each time there's a new search.
 
 - (void)_storeLastSearch:(NSString *)lastSearch
 {
@@ -57,11 +63,43 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  [self _setUIState:[WeatherUIState newWithEmpty]];
-  // Probably would be more efficient to do this in the constructor, but this works for now.
+  [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+    return [WeatherUIState newWithLoading:currentState.searchText];
+  }];
+  _locationManager = [LocationManager new];
+  __weak __typeof(self) weakSelf = self;
+  [_locationManager getLocation:^(double lat, double lon) {
+    [CompositeWeatherDataFetcher fetchWeatherWithLat:lat lon:lon completionBlock:^(CompositeWeatherData * _Nonnull weatherData) {
+      [weakSelf _handleLocationBasedWeatherLoaded:weatherData];
+    }];
+  } errorBlock:^{
+    [weakSelf _handleLocationRequestFailed];
+  }];
+}
+
+- (void)_handleLocationBasedWeatherLoaded:(CompositeWeatherData *)weatherData
+{
+  if (weatherData) {
+    [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+      return [WeatherUIState newWithHasWeather:weatherData searchText:weatherData.locationName];
+    }];
+    [self _storeLastSearch:weatherData.locationName];
+  } else {
+    [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+      return [WeatherUIState newWithEmpty:currentState.searchText];
+    }];
+    [self _handleLocationRequestFailed];
+  }
+}
+
+- (void)_handleLocationRequestFailed
+{
+  // As a backup, retrieve last search.
   NSString *key = [self _retrieveLastSearch];
-  _searchTextField.text = key;
-  [self _didTapSearchButton:nil];
+  [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+    return [WeatherUIState newWithEmpty:key];
+  }];
+  [self _performSearch:key];
 }
 
 - (void)loadView
@@ -108,7 +146,7 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   self.view = mainView;
 }
 
-- (void)_setUIState:(WeatherUIState *)uiState {
+- (void)_setUIState:(WeatherUIState *(^)(WeatherUIState *currentState))uiStateBlock {
   // UIState is read on the main queue (UI Updates).
   // Make sure to write to it on the same queue.
   // (avoid potential retain cycle by not capturing self, even though technically this block isn't captured)
@@ -116,10 +154,28 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   dispatch_async(dispatch_get_main_queue(), ^{
     __strong __typeof(weakSelf) strongSelf = weakSelf;
     if (strongSelf) {
-      strongSelf->_uiState = uiState;
+      strongSelf->_uiState = uiStateBlock(strongSelf->_uiState);
       [strongSelf.view setNeedsLayout];
     }
   });
+}
+
+- (void)_performSearch:(NSString *)searchKey
+{
+  [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+    return [WeatherUIState newWithLoading:searchKey];
+  }];
+  [CompositeWeatherDataFetcher fetchWeatherWithKey:searchKey completionBlock:^(CompositeWeatherData * _Nonnull weatherData) {
+    if (!weatherData) {
+      [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+        return [WeatherUIState newWithError:currentState.searchText];
+      }];
+      return;
+    }
+    [self _setUIState:^WeatherUIState *(WeatherUIState *currentState) {
+      return [WeatherUIState newWithHasWeather:weatherData searchText:currentState.searchText];
+    }];
+  }];
 }
 
 - (void)_didTapSearchButton:(UIButton *)button
@@ -129,14 +185,7 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
     return;
   }
   [self _storeLastSearch:key];
-  [self _setUIState:[WeatherUIState newWithLoading]];
-  [CompositeWeatherDataFetcher fetchWeatherWithKey:key completionBlock:^(CompositeWeatherData * _Nonnull weatherData) {
-    if (!weatherData) {
-      [self _setUIState:[WeatherUIState newWithError]];
-      return;
-    }
-    [self _setUIState:[WeatherUIState newWithHasWeather:weatherData]];
-  }];
+  [self _performSearch:key];
 }
 
 - (void)viewDidLayoutSubviews
@@ -160,15 +209,21 @@ static CGRect GetFrameCentered(CGRect frame, int width, int height)
   
   _weatherDisplayView.frame = CGRectMake(0, _searchBarView.frame.origin.y + _searchBarView.frame.size.height + 10, _subView.frame.size.width, 500);
   
-  [_uiState empty:^{
+  __block NSString *blockText = @"";
+  [_uiState empty:^(NSString *searchText){
     [self layoutForEmpty];
-  } hasWeather:^(CompositeWeatherData * _Nonnull weatherData) {
+    blockText = searchText;
+  } hasWeather:^(CompositeWeatherData * _Nonnull weatherData, NSString *searchText) {
     [self layoutForWeatherData:weatherData];
-  } loading:^{
+    blockText = searchText;
+  } loading:^(NSString *searchText){
     [self layoutForLoading];
-  } error:^{
+    blockText = searchText;
+  } error:^(NSString *searchText){
     [self layoutForError];
+    blockText = searchText;
   }];
+  [_searchTextField setText:blockText];
 }
 
 - (void)layoutForEmpty

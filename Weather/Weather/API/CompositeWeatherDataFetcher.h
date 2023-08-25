@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)fetchWeatherWithKey:(NSString *)key completionBlock:(void(^)(CompositeWeatherData *))completionBlock;
 
++ (void)fetchWeatherWithLat:(double)lat lon:(double)lon completionBlock:(void(^)(CompositeWeatherData *))completionBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

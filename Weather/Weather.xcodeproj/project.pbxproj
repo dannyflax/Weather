@@ -27,6 +27,7 @@
 		EF7A90BD2A99176E009AEF19 /* CompositeWeatherDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90BC2A99176E009AEF19 /* CompositeWeatherDataFetcher.m */; };
 		EF7A90C02A991C09009AEF19 /* WeatherIconFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90BF2A991C09009AEF19 /* WeatherIconFetcher.m */; };
 		EF7A90C32A992512009AEF19 /* WeatherUIState.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90C22A992512009AEF19 /* WeatherUIState.m */; };
+		EF7A90C72A993A4B009AEF19 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF7A90C62A993A4B009AEF19 /* LocationManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,8 @@
 		EF7A90BF2A991C09009AEF19 /* WeatherIconFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherIconFetcher.m; sourceTree = "<group>"; };
 		EF7A90C12A992512009AEF19 /* WeatherUIState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherUIState.h; sourceTree = "<group>"; };
 		EF7A90C22A992512009AEF19 /* WeatherUIState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherUIState.m; sourceTree = "<group>"; };
+		EF7A90C52A993A4B009AEF19 /* LocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		EF7A90C62A993A4B009AEF19 /* LocationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +137,7 @@
 		EF7A906E2A9842CD009AEF19 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				EF7A90C42A993A33009AEF19 /* Location */,
 				EF7A90B12A986662009AEF19 /* Common */,
 				EF7A90A42A985921009AEF19 /* API */,
 				EF7A906F2A9842CD009AEF19 /* AppDelegate.h */,
@@ -200,6 +204,15 @@
 				EF7A90B32A98669D009AEF19 /* Utils.m */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		EF7A90C42A993A33009AEF19 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				EF7A90C52A993A4B009AEF19 /* LocationManager.h */,
+				EF7A90C62A993A4B009AEF19 /* LocationManager.m */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,6 +351,7 @@
 				EF7A90A72A985980009AEF19 /* WeatherData.m in Sources */,
 				EF7A90772A9842CD009AEF19 /* ViewController.m in Sources */,
 				EF7A90B02A9860D1009AEF19 /* WeatherDataFetcher.m in Sources */,
+				EF7A90C72A993A4B009AEF19 /* LocationManager.m in Sources */,
 				EF7A90AD2A985CF7009AEF19 /* RestAPIFetcher.m in Sources */,
 				EF7A90BA2A991664009AEF19 /* CompositeWeatherData.m in Sources */,
 				EF7A90712A9842CD009AEF19 /* AppDelegate.m in Sources */,

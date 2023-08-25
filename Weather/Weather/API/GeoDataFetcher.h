@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)fetchGeoDataWithKey:(NSString *)key completionBlock:(void(^)(GeoData *geoData))completionBlock;
 
++ (void)fetchGeoDataWithLat:(double)lat lon:(double)lon completionBlock:(void(^)(GeoData *geoData))completionBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END

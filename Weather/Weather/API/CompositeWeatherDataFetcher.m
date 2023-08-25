@@ -22,10 +22,23 @@
     return;
   }
   [GeoDataFetcher fetchGeoDataWithKey:key completionBlock:^(GeoData * _Nonnull geoData) {
+    [self _processGeoData:geoData completionBlock:completionBlock];
+  }];
+}
+
++ (void)fetchWeatherWithLat:(double)lat lon:(double)lon completionBlock:(void(^)(CompositeWeatherData *))completionBlock
+{
+  [GeoDataFetcher fetchGeoDataWithLat:lat lon:lon completionBlock:^(GeoData * _Nonnull geoData) {
+    [self _processGeoData:geoData completionBlock:completionBlock];
+  }];
+}
+   
++ (void)_processGeoData:(GeoData *)geoData completionBlock:(void(^)(CompositeWeatherData *))completionBlock
+   {
     if (!geoData) {
-      completionBlock(nil);
-      return;
-    }
+       completionBlock(nil);
+       return;
+     }
     [WeatherDataFetcher fetchWeatherWithLatitude:geoData.latitude longitude:geoData.longitude completionBlock:^(WeatherData * _Nonnull weatherData) {
       if (!weatherData) {
         completionBlock(nil);
@@ -39,7 +52,6 @@
         completionBlock([[CompositeWeatherData alloc] initWithLocationName:geoData.name country:geoData.country state:geoData.state weatherStatusTitle:weatherData.mainTitle weatherDescription:weatherData.weatherDescription icon:icon]);
       }];
     }];
-  }];
 }
 
 @end
